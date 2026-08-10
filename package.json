@@ -1,0 +1,17 @@
+{
+  "name": "tvstation",
+  "version": "1.0.0",
+  "description": "Digital signage static sites for school hallway TVs",
+  "private": true,
+  "scripts": {
+    "build": "eleventy --config=generator/.eleventy.js",
+    "watch": "eleventy --config=generator/.eleventy.js --watch --serve",
+    "admin": "node admin/server.js"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "qrcode": "^1.5.4"
+  }
+}

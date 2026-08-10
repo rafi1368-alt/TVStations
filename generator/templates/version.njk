@@ -1,0 +1,9 @@
+---
+pagination:
+  data: sites
+  size: 1
+  alias: site
+permalink: "{{ site.slug }}/version.json"
+eleventyExcludeFromCollections: true
+---
+{"buildTime": {{ buildTime | dump | safe }}}

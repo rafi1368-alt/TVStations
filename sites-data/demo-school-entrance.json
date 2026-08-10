@@ -1,0 +1,16 @@
+{
+  "orientation": "landscape",
+  "rotateViaCss": false,
+  "carouselIntervalSec": 8,
+  "images": [
+    "slide1.svg",
+    "slide2.svg"
+  ],
+  "ticker": [
+    "ברוכים הבאים לבית הספר!",
+    "בדיקת עדכון טיקר מהפאנל"
+  ],
+  "qrTarget": "https://forms.gle/replace-with-your-form",
+  "slug": "demo-school-entrance",
+  "name": "בית ספר הדגמה - כניסה ראשית"
+}

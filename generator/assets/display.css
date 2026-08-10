@@ -1,0 +1,108 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Landscape TV: stage fills the screen as-is. */
+.orientation-landscape .stage {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Portrait TV whose panel already reports a portrait resolution natively. */
+.orientation-portrait:not(.rotate-css) .stage {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Portrait content on a TV that only reports landscape resolution:
+   render the page as a rotated portrait rectangle that fills the landscape frame. */
+.orientation-portrait.rotate-css .stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vh;
+  height: 100vw;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.carousel {
+  position: absolute;
+  inset: 0;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.ticker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8%;
+  min-height: 48px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ticker-track {
+  display: inline-flex;
+  gap: 4rem;
+  padding-inline-start: 100%;
+  animation: ticker-scroll 30s linear infinite;
+  font-size: 1.6vw;
+}
+
+.ticker-item {
+  white-space: nowrap;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+.qr-box {
+  position: absolute;
+  right: 1.2%;
+  bottom: 9%;
+  background: #fff;
+  padding: 0.5vw;
+  border-radius: 6px;
+  line-height: 0;
+}
+
+.qr-box img {
+  width: 9vw;
+  max-width: 160px;
+  min-width: 90px;
+  height: auto;
+  display: block;
+}

@@ -1,0 +1,46 @@
+---
+pagination:
+  data: sites
+  size: 1
+  alias: site
+permalink: "{{ site.slug }}/index.html"
+---
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ site.name }}</title>
+<link rel="stylesheet" href="/static/display.css">
+</head>
+<body class="orientation-{{ site.orientation }}{% if site.rotateViaCss %} rotate-css{% endif %}">
+  <div class="stage">
+    <div class="carousel" id="carousel">
+      {% for img in site.images %}
+      <img class="slide{% if loop.first %} active{% endif %}" src="/assets/{{ site.slug }}/images/{{ img }}" alt="">
+      {% endfor %}
+    </div>
+
+    <div class="ticker">
+      <div class="ticker-track" id="tickerTrack">
+        {% for line in site.ticker %}<span class="ticker-item">{{ line }}</span>{% endfor %}
+      </div>
+    </div>
+
+    {% if site.qrTarget %}
+    <div class="qr-box">
+      <img src="{% qrDataUri site.qrTarget %}" alt="QR">
+    </div>
+    {% endif %}
+  </div>
+
+  <script>
+    window.__SITE__ = {
+      slug: {{ site.slug | dump | safe }},
+      carouselIntervalSec: {{ site.carouselIntervalSec }},
+      buildTime: {{ buildTime | dump | safe }}
+    };
+  </script>
+  <script src="/static/display.js"></script>
+</body>
+</html>
