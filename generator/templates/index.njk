@@ -1,0 +1,28 @@
+---
+permalink: "index.html"
+---
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TVStation - אתרי תצוגה</title>
+<style>
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #f3f4f6; color: #111827; margin: 0; padding: 2rem; }
+  h1 { font-size: 1.4rem; }
+  ul { list-style: none; padding: 0; max-width: 480px; }
+  li { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 0.6rem; }
+  a { display: block; padding: 0.8rem 1rem; text-decoration: none; color: #2563eb; font-weight: 600; }
+  .muted { color: #6b7280; font-size: 0.85rem; }
+</style>
+</head>
+<body>
+  <h1>אתרי תצוגה</h1>
+  <ul>
+    {% for site in sites %}
+    <li><a href="/{{ site.slug }}/">{{ site.name }}</a></li>
+    {% endfor %}
+  </ul>
+  <p class="muted">זהו עמוד אינדקס נוח לניווט בלבד - כל טלוויזיה צריכה להיות מוצבת ישירות על כתובת האתר שלה, לא על העמוד הזה.</p>
+</body>
+</html>
