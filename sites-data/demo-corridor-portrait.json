@@ -9,6 +9,8 @@
     "Welcome to the live chef demonstration by Chef Ran Pollak! We hope you have a memorable and inspiring experience tonight."
   ],
   "tickerDirection": "rtl",
+  "tickerSpeedSec": 50,
+  "tickerSizePercent": 70,
   "qrTarget": "https://www.galileeculinaryinstitute.com/",
   "slug": "demo-corridor-portrait",
   "name": "GCI Entrance"
