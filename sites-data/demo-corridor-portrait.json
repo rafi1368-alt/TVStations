@@ -8,6 +8,7 @@
   "ticker": [
     "Welcome to Family workshop event"
   ],
+  "tickerDirection": "ltr",
   "qrTarget": "https://www.galileeculinaryinstitute.com/",
   "slug": "demo-corridor-portrait",
   "name": "GCI מסך כניסה"

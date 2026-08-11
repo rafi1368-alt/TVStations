@@ -10,6 +10,7 @@ const SITE_DEFAULTS = {
   carouselIntervalSec: 8,
   images: [],
   ticker: [],
+  tickerDirection: "ltr",
   qrTarget: "",
 };
 

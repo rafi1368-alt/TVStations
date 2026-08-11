@@ -57,7 +57,7 @@ app.get("/sites/new", (req, res) => {
 app.post("/sites", (req, res) => {
   try {
     const site = sites.createSite(req.body);
-    redirectWithFlash(res, `/sites/${site.slug}`, "האתר נוצר בהצלחה.");
+    redirectWithFlash(res, `/sites/${site.slug}`, "Site created successfully.");
   } catch (err) {
     redirectWithFlash(res, "/sites/new", err.message, true);
   }
@@ -65,7 +65,7 @@ app.post("/sites", (req, res) => {
 
 app.get("/sites/:slug", (req, res) => {
   const site = sites.getSite(req.params.slug);
-  if (!site) return res.status(404).send("האתר לא נמצא");
+  if (!site) return res.status(404).send("Site not found");
   res.send(renderEdit(site, flashFromQuery(req)));
 });
 
@@ -73,7 +73,7 @@ app.post("/sites/:slug", (req, res) => {
   const { slug } = req.params;
   try {
     sites.updateSiteFields(slug, req.body);
-    redirectWithFlash(res, `/sites/${slug}`, "ההגדרות נשמרו.");
+    redirectWithFlash(res, `/sites/${slug}`, "Settings saved.");
   } catch (err) {
     redirectWithFlash(res, `/sites/${slug}`, err.message, true);
   }
@@ -84,7 +84,7 @@ app.post("/sites/:slug/ticker", (req, res) => {
   try {
     const lines = String(req.body.ticker || "").split(/\r?\n/);
     sites.updateTicker(slug, lines);
-    redirectWithFlash(res, `/sites/${slug}`, "הטיקר נשמר.");
+    redirectWithFlash(res, `/sites/${slug}`, "Ticker saved.");
   } catch (err) {
     redirectWithFlash(res, `/sites/${slug}`, err.message, true);
   }
@@ -93,9 +93,9 @@ app.post("/sites/:slug/ticker", (req, res) => {
 app.post("/sites/:slug/images", upload.single("image"), (req, res) => {
   const { slug } = req.params;
   try {
-    if (!req.file) throw new Error("לא נבחרה תמונה.");
+    if (!req.file) throw new Error("No image was selected.");
     sites.addImage(slug, req.file.filename);
-    redirectWithFlash(res, `/sites/${slug}`, "התמונה הועלתה.");
+    redirectWithFlash(res, `/sites/${slug}`, "Image uploaded.");
   } catch (err) {
     redirectWithFlash(res, `/sites/${slug}`, err.message, true);
   }
@@ -105,7 +105,7 @@ app.post("/sites/:slug/images/:filename/delete", (req, res) => {
   const { slug, filename } = req.params;
   try {
     sites.removeImage(slug, filename);
-    redirectWithFlash(res, `/sites/${slug}`, "התמונה נמחקה.");
+    redirectWithFlash(res, `/sites/${slug}`, "Image deleted.");
   } catch (err) {
     redirectWithFlash(res, `/sites/${slug}`, err.message, true);
   }
@@ -115,7 +115,7 @@ app.post("/sites/:slug/images/:filename/move", (req, res) => {
   const { slug, filename } = req.params;
   try {
     sites.moveImage(slug, filename, req.body.direction === "up" ? "up" : "down");
-    redirectWithFlash(res, `/sites/${slug}`, "סדר התמונות עודכן.");
+    redirectWithFlash(res, `/sites/${slug}`, "Image order updated.");
   } catch (err) {
     redirectWithFlash(res, `/sites/${slug}`, err.message, true);
   }
@@ -124,19 +124,19 @@ app.post("/sites/:slug/images/:filename/move", (req, res) => {
 app.post("/sites/:slug/delete", (req, res) => {
   const { slug } = req.params;
   sites.deleteSite(slug);
-  redirectWithFlash(res, "/", "האתר נמחק.");
+  redirectWithFlash(res, "/", "Site deleted.");
 });
 
 app.post("/build", async (req, res) => {
   const result = await runBuild();
-  redirectWithFlash(res, "/", result.ok ? "הבנייה הושלמה בהצלחה." : `שגיאת בנייה:\n${result.stderr}`, !result.ok);
+  redirectWithFlash(res, "/", result.ok ? "Build completed successfully." : `Build error:\n${result.stderr}`, !result.ok);
 });
 
 app.post("/publish", async (req, res) => {
   const steps = await runPublish("Update TV display content");
   const failed = steps.find((s) => !s.ok && !/nothing to commit/i.test(s.stdout + s.stderr));
   const summary = steps.map((s) => `$ ${s.command}\n${s.stdout}\n${s.stderr}`.trim()).join("\n\n");
-  redirectWithFlash(res, "/", failed ? `הפרסום נתקל בבעיה:\n${summary}` : "הפרסום בוצע בהצלחה.", !!failed);
+  redirectWithFlash(res, "/", failed ? `Publish ran into a problem:\n${summary}` : "Published successfully.", !!failed);
 });
 
 app.listen(PORT, () => {

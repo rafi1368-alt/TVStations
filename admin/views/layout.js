@@ -8,11 +8,11 @@ function escapeHtml(str) {
 
 function layout({ title, body, flash }) {
   return `<!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${escapeHtml(title)} - ניהול תצוגות TVStation</title>
+<title>${escapeHtml(title)} - TVStation Admin</title>
 <style>
   * { box-sizing: border-box; }
   body { font-family: "Segoe UI", Arial, sans-serif; background: #f3f4f6; color: #111827; margin: 0; }
@@ -37,7 +37,7 @@ function layout({ title, body, flash }) {
   button.danger, .btn.danger { background: #dc2626; }
   form.inline { display: inline; }
   table { width: 100%; border-collapse: collapse; }
-  td, th { padding: 0.5rem; text-align: right; border-bottom: 1px solid #e5e7eb; }
+  td, th { padding: 0.5rem; text-align: left; border-bottom: 1px solid #e5e7eb; }
   .muted { color: #6b7280; font-size: 0.85rem; }
   .flash { background: #ecfdf5; border: 1px solid #10b981; color: #065f46; padding: 0.7rem 1rem; border-radius: 8px; margin-bottom: 1rem; white-space: pre-wrap; }
   .flash.error { background: #fef2f2; border-color: #dc2626; color: #991b1b; }
@@ -51,7 +51,7 @@ function layout({ title, body, flash }) {
 </head>
 <body>
 <header>
-  <a href="/">TVStation - ניהול תצוגות</a>
+  <a href="/">TVStation - Display Manager</a>
 </header>
 <main>
   ${flash ? `<div class="flash${flash.error ? " error" : ""}">${escapeHtml(flash.message)}</div>` : ""}

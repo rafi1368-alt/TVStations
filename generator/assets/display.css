@@ -76,17 +76,28 @@ html, body {
 .ticker-track {
   display: inline-flex;
   gap: 4rem;
-  animation: ticker-scroll 30s linear infinite;
+  animation: ticker-scroll-ltr 30s linear infinite;
   font-size: clamp(18px, 1.6vw, 48px);
+}
+
+.ticker-track.dir-rtl {
+  animation-name: ticker-scroll-rtl;
 }
 
 .ticker-item {
   white-space: nowrap;
 }
 
-@keyframes ticker-scroll {
+/* Enters from the left, exits on the right. */
+@keyframes ticker-scroll-ltr {
   from { transform: translateX(-100%); }
   to { transform: translateX(100vw); }
+}
+
+/* Enters from the right, exits on the left. */
+@keyframes ticker-scroll-rtl {
+  from { transform: translateX(100vw); }
+  to { transform: translateX(-100%); }
 }
 
 .qr-box {

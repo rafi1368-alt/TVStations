@@ -11,6 +11,7 @@ const SITE_DEFAULTS = {
   carouselIntervalSec: 8,
   images: [],
   ticker: [],
+  tickerDirection: "ltr",
   qrTarget: "",
 };
 
@@ -64,7 +65,7 @@ function writeSite(site) {
   fs.writeFileSync(siteFilePath(site.slug), JSON.stringify(site, null, 2) + "\n", "utf8");
 }
 
-function createSite({ slug, name, orientation, rotateViaCss, carouselIntervalSec, qrTarget }) {
+function createSite({ slug, name, orientation, rotateViaCss, carouselIntervalSec, tickerDirection, qrTarget }) {
   assertValidSlug(slug);
   if (getSite(slug)) {
     throw new Error(`An entry named "${slug}" already exists.`);
@@ -76,6 +77,7 @@ function createSite({ slug, name, orientation, rotateViaCss, carouselIntervalSec
     orientation: orientation === "portrait" ? "portrait" : "landscape",
     rotateViaCss: !!rotateViaCss,
     carouselIntervalSec: Number(carouselIntervalSec) || SITE_DEFAULTS.carouselIntervalSec,
+    tickerDirection: tickerDirection === "rtl" ? "rtl" : "ltr",
     qrTarget: qrTarget || "",
   };
   writeSite(site);
@@ -91,6 +93,7 @@ function updateSiteFields(slug, fields) {
     orientation: fields.orientation === "portrait" ? "portrait" : "landscape",
     rotateViaCss: !!fields.rotateViaCss,
     carouselIntervalSec: Number(fields.carouselIntervalSec) || site.carouselIntervalSec,
+    tickerDirection: fields.tickerDirection === "rtl" ? "rtl" : "ltr",
     qrTarget: fields.qrTarget ?? site.qrTarget,
   };
   writeSite(updated);
