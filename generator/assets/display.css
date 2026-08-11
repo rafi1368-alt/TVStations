@@ -62,8 +62,8 @@ html, body {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 8%;
-  min-height: 48px;
+  height: 10%;
+  min-height: 64px;
   background: rgba(0, 0, 0, 0.75);
   color: #fff;
   display: flex;
@@ -77,7 +77,14 @@ html, body {
   display: inline-flex;
   gap: 4rem;
   animation: ticker-scroll-ltr 30s linear infinite;
-  font-size: clamp(18px, 1.6vw, 48px);
+  /* Always 80% of the ticker bar's own height (bar = max(10vh, 64px)). */
+  font-size: max(8vh, 51.2px);
+}
+
+/* Ticker bar height tracks .stage's height, which is 100vw (not 100vh)
+   when the page is CSS-rotated for a portrait TV - match the font-size formula. */
+.orientation-portrait.rotate-css .ticker-track {
+  font-size: max(8vw, 51.2px);
 }
 
 .ticker-track.dir-rtl {
@@ -103,7 +110,7 @@ html, body {
 .qr-box {
   position: absolute;
   right: 1.2%;
-  bottom: 9%;
+  bottom: 11%;
   background: #fff;
   padding: 0.5vw;
   border-radius: 6px;
