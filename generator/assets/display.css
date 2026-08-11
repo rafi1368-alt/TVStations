@@ -70,12 +70,12 @@ html, body {
   align-items: center;
   overflow: hidden;
   white-space: nowrap;
+  direction: ltr;
 }
 
 .ticker-track {
   display: inline-flex;
   gap: 4rem;
-  padding-inline-start: 100%;
   animation: ticker-scroll 30s linear infinite;
   font-size: clamp(18px, 1.6vw, 48px);
 }
@@ -85,8 +85,8 @@ html, body {
 }
 
 @keyframes ticker-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100vw); }
 }
 
 .qr-box {
