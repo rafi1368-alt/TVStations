@@ -10,7 +10,7 @@
   ],
   "tickerDirection": "rtl",
   "tickerSpeedSec": 50,
-  "tickerSizePercent": 50,
+  "tickerSizePercent": 40,
   "qrTarget": "https://www.galileeculinaryinstitute.com/",
   "slug": "demo-corridor-portrait",
   "name": "GCI Entrance"
