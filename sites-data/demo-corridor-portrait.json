@@ -1,6 +1,6 @@
 {
   "orientation": "portrait",
-  "rotateViaCss": true,
+  "rotateViaCss": false,
   "carouselIntervalSec": 8,
   "images": [
     "1786439258502-_______1.jpeg"

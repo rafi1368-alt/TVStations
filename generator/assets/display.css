@@ -100,9 +100,9 @@ html, body {
 }
 
 .qr-box img {
-  width: 9vw;
-  max-width: 160px;
-  min-width: 90px;
+  width: 6.3vw;
+  max-width: 112px;
+  min-width: 63px;
   height: auto;
   display: block;
 }
