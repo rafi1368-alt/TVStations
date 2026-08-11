@@ -22,7 +22,7 @@ permalink: "{{ site.slug }}/index.html"
     </div>
 
     <div class="ticker">
-      <div class="ticker-track{% if site.tickerDirection == 'rtl' %} dir-rtl{% endif %}" id="tickerTrack">
+      <div class="ticker-track{% if site.tickerDirection == 'rtl' %} dir-rtl{% endif %}" id="tickerTrack" style="--ticker-pct: {{ site.tickerSizePercent }}; animation-duration: {{ site.tickerSpeedSec }}s;">
         {% for line in site.ticker %}<span class="ticker-item">{{ line }}</span>{% endfor %}
       </div>
     </div>

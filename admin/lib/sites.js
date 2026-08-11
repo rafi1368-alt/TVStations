@@ -12,10 +12,18 @@ const SITE_DEFAULTS = {
   images: [],
   ticker: [],
   tickerDirection: "ltr",
+  tickerSpeedSec: 30,
+  tickerSizePercent: 80,
   qrTarget: "",
 };
 
 const SLUG_RE = /^[a-z0-9][a-z0-9-]*$/;
+
+function clamp(value, min, max, fallback) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return fallback;
+  return Math.min(max, Math.max(min, n));
+}
 
 function ensureDirs() {
   fs.mkdirSync(SITES_DIR, { recursive: true });
@@ -65,7 +73,17 @@ function writeSite(site) {
   fs.writeFileSync(siteFilePath(site.slug), JSON.stringify(site, null, 2) + "\n", "utf8");
 }
 
-function createSite({ slug, name, orientation, rotateViaCss, carouselIntervalSec, tickerDirection, qrTarget }) {
+function createSite({
+  slug,
+  name,
+  orientation,
+  rotateViaCss,
+  carouselIntervalSec,
+  tickerDirection,
+  tickerSpeedSec,
+  tickerSizePercent,
+  qrTarget,
+}) {
   assertValidSlug(slug);
   if (getSite(slug)) {
     throw new Error(`An entry named "${slug}" already exists.`);
@@ -78,6 +96,8 @@ function createSite({ slug, name, orientation, rotateViaCss, carouselIntervalSec
     rotateViaCss: !!rotateViaCss,
     carouselIntervalSec: Number(carouselIntervalSec) || SITE_DEFAULTS.carouselIntervalSec,
     tickerDirection: tickerDirection === "rtl" ? "rtl" : "ltr",
+    tickerSpeedSec: clamp(tickerSpeedSec, 5, 120, SITE_DEFAULTS.tickerSpeedSec),
+    tickerSizePercent: clamp(tickerSizePercent, 20, 150, SITE_DEFAULTS.tickerSizePercent),
     qrTarget: qrTarget || "",
   };
   writeSite(site);
@@ -94,6 +114,8 @@ function updateSiteFields(slug, fields) {
     rotateViaCss: !!fields.rotateViaCss,
     carouselIntervalSec: Number(fields.carouselIntervalSec) || site.carouselIntervalSec,
     tickerDirection: fields.tickerDirection === "rtl" ? "rtl" : "ltr",
+    tickerSpeedSec: clamp(fields.tickerSpeedSec, 5, 120, site.tickerSpeedSec),
+    tickerSizePercent: clamp(fields.tickerSizePercent, 20, 150, site.tickerSizePercent),
     qrTarget: fields.qrTarget ?? site.qrTarget,
   };
   writeSite(updated);

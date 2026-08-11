@@ -28,6 +28,12 @@ function renderNewSite(flash) {
           <option value="rtl">From the right</option>
         </select>
 
+        <label>Ticker speed (seconds per pass - lower is faster)</label>
+        <input type="number" name="tickerSpeedSec" value="30" min="5" max="120">
+
+        <label>Ticker text size (% of ticker bar height)</label>
+        <input type="number" name="tickerSizePercent" value="80" min="20" max="150">
+
         <label>Carousel speed (seconds)</label>
         <input type="number" name="carouselIntervalSec" value="8" min="2">
 

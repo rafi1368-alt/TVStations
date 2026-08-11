@@ -51,6 +51,12 @@ function renderEdit(site, flash) {
           <option value="rtl" ${site.tickerDirection === "rtl" ? "selected" : ""}>From the right</option>
         </select>
 
+        <label>Ticker speed (seconds per pass - lower is faster)</label>
+        <input type="number" name="tickerSpeedSec" value="${site.tickerSpeedSec}" min="5" max="120">
+
+        <label>Ticker text size (% of ticker bar height)</label>
+        <input type="number" name="tickerSizePercent" value="${site.tickerSizePercent}" min="20" max="150">
+
         <label>Carousel speed (seconds)</label>
         <input type="number" name="carouselIntervalSec" value="${site.carouselIntervalSec}" min="2">
 

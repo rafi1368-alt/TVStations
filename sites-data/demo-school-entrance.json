@@ -10,6 +10,9 @@
     "ברוכים הבאים לבית הספר!",
     "בדיקת עדכון טיקר מהפאנל"
   ],
+  "tickerDirection": "ltr",
+  "tickerSpeedSec": 30,
+  "tickerSizePercent": 80,
   "qrTarget": "https://forms.gle/replace-with-your-form",
   "slug": "demo-school-entrance",
   "name": "MUSS מסך כניסה"

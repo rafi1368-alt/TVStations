@@ -77,14 +77,15 @@ html, body {
   display: inline-flex;
   gap: 4rem;
   animation: ticker-scroll-ltr 30s linear infinite;
-  /* Always 80% of the ticker bar's own height (bar = max(10vh, 64px)). */
-  font-size: max(8vh, 51.2px);
+  /* --ticker-pct (set inline per-site, default 80) as a % of the ticker
+     bar's own height (bar = max(10vh, 64px)). */
+  font-size: max(calc(var(--ticker-pct, 80) * 0.1vh), calc(var(--ticker-pct, 80) * 0.64px));
 }
 
 /* Ticker bar height tracks .stage's height, which is 100vw (not 100vh)
    when the page is CSS-rotated for a portrait TV - match the font-size formula. */
 .orientation-portrait.rotate-css .ticker-track {
-  font-size: max(8vw, 51.2px);
+  font-size: max(calc(var(--ticker-pct, 80) * 0.1vw), calc(var(--ticker-pct, 80) * 0.64px));
 }
 
 .ticker-track.dir-rtl {

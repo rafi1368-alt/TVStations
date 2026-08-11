@@ -11,6 +11,8 @@ const SITE_DEFAULTS = {
   images: [],
   ticker: [],
   tickerDirection: "ltr",
+  tickerSpeedSec: 30,
+  tickerSizePercent: 80,
   qrTarget: "",
 };
 
