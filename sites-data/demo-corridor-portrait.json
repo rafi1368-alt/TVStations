@@ -1,13 +1,15 @@
 {
-  "slug": "demo-corridor-portrait",
-  "name": "בית ספר הדגמה - מסדרון (אנכי)",
   "orientation": "portrait",
   "rotateViaCss": true,
   "carouselIntervalSec": 8,
-  "images": ["slide1.svg"],
+  "images": [
+    "1786439041407-gci11.png"
+  ],
   "ticker": [
     "מסך לדוגמה במצב תצוגה אנכי",
     "עדכונים נוספים יופיעו כאן"
   ],
-  "qrTarget": "https://example.org"
+  "qrTarget": "https://example.org",
+  "slug": "demo-corridor-portrait",
+  "name": "בית ספר הדגמה - מסדרון (אנכי)"
 }
