@@ -3,17 +3,15 @@
   "rotateViaCss": false,
   "carouselIntervalSec": 8,
   "images": [
-    "slide1.svg",
-    "slide2.svg"
+    "1786518642129-Muss-TV.png"
   ],
   "ticker": [
-    "ברוכים הבאים לבית הספר!",
-    "בדיקת עדכון טיקר מהפאנל"
+    "Welcome students of Fall semester 2026, URJ Heller Fall 2026, Jack M. Barrack Hebrew Academy 2026 and Washington State Impact Fellowship - Fall 2026."
   ],
   "tickerDirection": "ltr",
-  "tickerSpeedSec": 30,
-  "tickerSizePercent": 80,
-  "qrTarget": "https://forms.gle/replace-with-your-form",
+  "tickerSpeedSec": 50,
+  "tickerSizePercent": 40,
+  "qrTarget": "https://www.amhsi.org/",
   "slug": "demo-school-entrance",
   "name": "MUSS מסך כניסה"
 }
