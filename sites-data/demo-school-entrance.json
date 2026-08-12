@@ -8,10 +8,10 @@
   "ticker": [
     "Welcome students of Fall semester 2026, URJ Heller Fall 2026, Jack M. Barrack Hebrew Academy 2026 and Washington State Impact Fellowship - Fall 2026."
   ],
-  "tickerDirection": "ltr",
+  "tickerDirection": "rtl",
   "tickerSpeedSec": 50,
   "tickerSizePercent": 40,
   "qrTarget": "https://www.amhsi.org/",
   "slug": "demo-school-entrance",
-  "name": "MUSS מסך כניסה"
+  "name": "MUSS Entrance"
 }
