@@ -4,6 +4,7 @@ const multer = require("multer");
 
 const sites = require("./lib/sites");
 const { runBuild, runPublish } = require("./lib/build");
+const { basicAuth } = require("./lib/auth");
 const { renderList } = require("./views/list");
 const { renderNewSite } = require("./views/newSite");
 const { renderEdit } = require("./views/edit");
@@ -12,6 +13,7 @@ const ROOT = path.join(__dirname, "..");
 const PORT = process.env.PORT || 4000;
 
 const app = express();
+app.use(basicAuth);
 app.use(express.urlencoded({ extended: true }));
 app.use("/site-images", express.static(sites.ASSETS_DIR));
 app.use("/preview", express.static(path.join(ROOT, "dist")));
