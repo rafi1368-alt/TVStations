@@ -3,15 +3,15 @@
   "rotateViaCss": false,
   "carouselIntervalSec": 8,
   "images": [
-    "1786903468820-HSI.jpg"
+    "1786903641498-Welcom1.jpg"
   ],
   "ticker": [
     "Welcome students of Fall semester 2026, URJ Heller Fall 2026, Jack M. Barrack Hebrew Academy 2026 and Washington State Impact Fellowship - Fall 2026."
   ],
-  "tickerDirection": "ltr",
-  "tickerSpeedSec": 30,
-  "tickerSizePercent": 80,
-  "qrTarget": "https://forms.gle/replace-with-your-form",
+  "tickerDirection": "rtl",
+  "tickerSpeedSec": 40,
+  "tickerSizePercent": 50,
+  "qrTarget": "https://www.amhsi.org/",
   "slug": "demo-school-entrance",
-  "name": "MUSS מסך כניסה"
+  "name": "MUSS Entrance"
 }
