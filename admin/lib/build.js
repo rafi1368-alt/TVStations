@@ -69,8 +69,12 @@ async function pushStep() {
     };
   }
 
+  // A deploy checkout is usually a detached HEAD at a specific commit rather
+  // than a real branch checkout - `rev-parse --abbrev-ref HEAD` then literally
+  // returns the string "HEAD", which is not a real branch to push to.
   const branchResult = await run("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
-  const branch = (branchResult.stdout || "main").trim();
+  const detectedBranch = branchResult.stdout.trim();
+  const branch = process.env.GIT_PUBLISH_BRANCH || (detectedBranch && detectedBranch !== "HEAD" ? detectedBranch : "main");
   const authedUrl = `https://x-access-token:${token}@github.com/${ownerRepo}.git`;
   const result = await run("git", ["push", authedUrl, `HEAD:${branch}`]);
 
