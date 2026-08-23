@@ -76,9 +76,27 @@ async function pushStep() {
   const detectedBranch = branchResult.stdout.trim();
   const branch = process.env.GIT_PUBLISH_BRANCH || (detectedBranch && detectedBranch !== "HEAD" ? detectedBranch : "main");
   const authedUrl = `https://x-access-token:${token}@github.com/${ownerRepo}.git`;
-  const result = await run("git", ["push", authedUrl, `HEAD:${branch}`]);
-
   const scrub = (s) => s.split(token).join("***");
+
+  // This checkout can fall behind origin between publishes (e.g. someone else
+  // published, or this instance restarted on an older commit) - rebase the new
+  // commit(s) onto the latest remote tip first so the push below doesn't get
+  // rejected as a non-fast-forward.
+  const fetchResult = await run("git", ["fetch", authedUrl, branch]);
+  if (fetchResult.ok) {
+    const rebaseResult = await run("git", ["rebase", "FETCH_HEAD"]);
+    if (!rebaseResult.ok) {
+      await run("git", ["rebase", "--abort"]);
+      return {
+        command: "git rebase (onto latest GitHub content)",
+        ok: false,
+        stdout: scrub(rebaseResult.stdout),
+        stderr: `${scrub(rebaseResult.stderr)}\n\nThis change conflicts with something already published since this page loaded. Reload and try again.`,
+      };
+    }
+  }
+
+  const result = await run("git", ["push", authedUrl, `HEAD:${branch}`]);
   return {
     command: "git push (using GITHUB_TOKEN)",
     ok: result.ok,
