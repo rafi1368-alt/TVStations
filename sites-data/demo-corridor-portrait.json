@@ -6,7 +6,8 @@
     "1786439258502-_______1.jpeg"
   ],
   "ticker": [
-    "Welcome U.S embassy and Upper Galilee council."
+    "Welcome U.S embassy and Upper Galilee council.",
+    "This is a rebase-test line."
   ],
   "tickerDirection": "rtl",
   "tickerSpeedSec": 50,
