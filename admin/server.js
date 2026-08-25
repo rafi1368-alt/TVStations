@@ -1,4 +1,5 @@
 const path = require("path");
+const crypto = require("crypto");
 const express = require("express");
 const multer = require("multer");
 
@@ -38,11 +39,17 @@ const upload = multer({
       }
     },
     filename: (_req, file, cb) => {
-      const safeName = file.originalname.replace(/[^a-zA-Z0-9_.-]/g, "_");
-      cb(null, `${Date.now()}-${safeName}`);
+      // Folder uploads (webkitdirectory) can include a relative path in
+      // originalname (e.g. "myfolder/photo.jpg") - strip it to a flat,
+      // filesystem-safe name. The random suffix keeps rapid multi-file
+      // uploads from colliding when Date.now() lands on the same millisecond.
+      const baseName = file.originalname.split(/[/\\]/).pop();
+      const safeName = baseName.replace(/[^a-zA-Z0-9_.-]/g, "_");
+      const unique = crypto.randomBytes(4).toString("hex");
+      cb(null, `${Date.now()}-${unique}-${safeName}`);
     },
   }),
-  limits: { fileSize: 15 * 1024 * 1024 },
+  limits: { fileSize: 15 * 1024 * 1024, files: 200 },
   fileFilter: (_req, file, cb) => {
     cb(null, /^image\//.test(file.mimetype));
   },
@@ -92,12 +99,13 @@ app.post("/sites/:slug/ticker", (req, res) => {
   }
 });
 
-app.post("/sites/:slug/images", upload.single("image"), (req, res) => {
+app.post("/sites/:slug/images", upload.array("images", 200), (req, res) => {
   const { slug } = req.params;
   try {
-    if (!req.file) throw new Error("No image was selected.");
-    sites.addImage(slug, req.file.filename);
-    redirectWithFlash(res, `/sites/${slug}`, "Image uploaded.");
+    if (!req.files || !req.files.length) throw new Error("No images were selected.");
+    sites.addImages(slug, req.files.map((f) => f.filename));
+    const count = req.files.length;
+    redirectWithFlash(res, `/sites/${slug}`, count === 1 ? "Image uploaded." : `${count} images uploaded.`);
   } catch (err) {
     redirectWithFlash(res, `/sites/${slug}`, err.message, true);
   }

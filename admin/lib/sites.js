@@ -138,12 +138,18 @@ function deleteSite(slug) {
 }
 
 function addImage(slug, filename) {
+  return addImages(slug, [filename]);
+}
+
+function addImages(slug, filenames) {
   const site = getSite(slug);
   if (!site) throw new Error(`Unknown site "${slug}".`);
-  if (!site.images.includes(filename)) {
-    site.images.push(filename);
-    writeSite(site);
+  for (const filename of filenames) {
+    if (!site.images.includes(filename)) {
+      site.images.push(filename);
+    }
   }
+  writeSite(site);
   return site;
 }
 
@@ -178,6 +184,7 @@ module.exports = {
   updateTicker,
   deleteSite,
   addImage,
+  addImages,
   removeImage,
   moveImage,
   imagesDir,
