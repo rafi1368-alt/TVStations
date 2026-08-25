@@ -79,24 +79,11 @@ function renderEdit(site, flash) {
     <div class="card">
       <h2>Carousel images</h2>
       <ul class="image-list">${imageItems || '<li class="muted">No images yet</li>'}</ul>
-      <form method="post" action="/sites/${slug}/images" enctype="multipart/form-data" id="uploadForm">
-        <label>Add images (select multiple files)</label>
-        <input type="file" name="images" accept="image/*" multiple id="filesInput">
-
-        <label>Or add a whole folder of images</label>
-        <input type="file" name="images" accept="image/*" multiple webkitdirectory directory id="folderInput">
-
+      <form method="post" action="/sites/${slug}/images" enctype="multipart/form-data">
+        <label>Add images - open the picker, go into a folder, and select as many images as you like (Ctrl/Cmd+A selects all)</label>
+        <input type="file" name="images" accept="image/*" multiple>
         <button type="submit">Upload</button>
       </form>
-      <script>
-        // Selecting one input clears the other, so only one set of files is submitted.
-        document.getElementById('filesInput').addEventListener('change', function () {
-          if (this.files.length) document.getElementById('folderInput').value = '';
-        });
-        document.getElementById('folderInput').addEventListener('change', function () {
-          if (this.files.length) document.getElementById('filesInput').value = '';
-        });
-      </script>
     </div>
 
     <div class="card">
