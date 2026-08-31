@@ -11,9 +11,11 @@ const SITE_DEFAULTS = {
   carouselIntervalSec: 8,
   images: [],
   ticker: [],
+  tickerEnabled: true,
   tickerDirection: "ltr",
   tickerSpeedSec: 30,
   tickerSizePercent: 80,
+  qrEnabled: true,
   qrTarget: "",
 };
 
@@ -79,9 +81,11 @@ function createSite({
   orientation,
   rotateViaCss,
   carouselIntervalSec,
+  tickerEnabled,
   tickerDirection,
   tickerSpeedSec,
   tickerSizePercent,
+  qrEnabled,
   qrTarget,
 }) {
   assertValidSlug(slug);
@@ -95,9 +99,11 @@ function createSite({
     orientation: orientation === "portrait" ? "portrait" : "landscape",
     rotateViaCss: !!rotateViaCss,
     carouselIntervalSec: Number(carouselIntervalSec) || SITE_DEFAULTS.carouselIntervalSec,
+    tickerEnabled: !!tickerEnabled,
     tickerDirection: tickerDirection === "rtl" ? "rtl" : "ltr",
     tickerSpeedSec: clamp(tickerSpeedSec, 5, 120, SITE_DEFAULTS.tickerSpeedSec),
     tickerSizePercent: clamp(tickerSizePercent, 20, 150, SITE_DEFAULTS.tickerSizePercent),
+    qrEnabled: !!qrEnabled,
     qrTarget: qrTarget || "",
   };
   writeSite(site);
@@ -113,9 +119,11 @@ function updateSiteFields(slug, fields) {
     orientation: fields.orientation === "portrait" ? "portrait" : "landscape",
     rotateViaCss: !!fields.rotateViaCss,
     carouselIntervalSec: Number(fields.carouselIntervalSec) || site.carouselIntervalSec,
+    tickerEnabled: !!fields.tickerEnabled,
     tickerDirection: fields.tickerDirection === "rtl" ? "rtl" : "ltr",
     tickerSpeedSec: clamp(fields.tickerSpeedSec, 5, 120, site.tickerSpeedSec),
     tickerSizePercent: clamp(fields.tickerSizePercent, 20, 150, site.tickerSizePercent),
+    qrEnabled: !!fields.qrEnabled,
     qrTarget: fields.qrTarget ?? site.qrTarget,
   };
   writeSite(updated);

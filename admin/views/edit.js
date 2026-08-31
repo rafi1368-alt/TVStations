@@ -45,6 +45,11 @@ function renderEdit(site, flash) {
           <label for="rotateViaCss" style="margin:0;">TV doesn't rotate on its own - rotate the content with CSS</label>
         </div>
 
+        <div class="checkbox-row">
+          <input type="checkbox" name="tickerEnabled" id="tickerEnabled" ${site.tickerEnabled ? "checked" : ""}>
+          <label for="tickerEnabled" style="margin:0;">Show the ticker (unchecked = no ticker bar at all, image fills the screen)</label>
+        </div>
+
         <label>Ticker entrance direction</label>
         <select name="tickerDirection">
           <option value="ltr" ${site.tickerDirection !== "rtl" ? "selected" : ""}>From the left</option>
@@ -59,6 +64,11 @@ function renderEdit(site, flash) {
 
         <label>Carousel speed (seconds)</label>
         <input type="number" name="carouselIntervalSec" value="${site.carouselIntervalSec}" min="2">
+
+        <div class="checkbox-row">
+          <input type="checkbox" name="qrEnabled" id="qrEnabled" ${site.qrEnabled ? "checked" : ""}>
+          <label for="qrEnabled" style="margin:0;">Show the QR code</label>
+        </div>
 
         <label>QR target (website/form URL)</label>
         <input type="url" name="qrTarget" value="${escapeHtml(site.qrTarget)}" placeholder="https://forms.gle/...">

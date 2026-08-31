@@ -22,6 +22,11 @@ function renderNewSite(flash) {
           <label for="rotateViaCss" style="margin:0;">TV doesn't rotate on its own - rotate the content with CSS</label>
         </div>
 
+        <div class="checkbox-row">
+          <input type="checkbox" name="tickerEnabled" id="tickerEnabled" checked>
+          <label for="tickerEnabled" style="margin:0;">Show the ticker (unchecked = no ticker bar at all, image fills the screen)</label>
+        </div>
+
         <label>Ticker entrance direction</label>
         <select name="tickerDirection">
           <option value="ltr">From the left</option>
@@ -36,6 +41,11 @@ function renderNewSite(flash) {
 
         <label>Carousel speed (seconds)</label>
         <input type="number" name="carouselIntervalSec" value="8" min="2">
+
+        <div class="checkbox-row">
+          <input type="checkbox" name="qrEnabled" id="qrEnabled" checked>
+          <label for="qrEnabled" style="margin:0;">Show the QR code</label>
+        </div>
 
         <label>QR target (website/form URL)</label>
         <input type="url" name="qrTarget" placeholder="https://forms.gle/...">

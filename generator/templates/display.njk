@@ -21,13 +21,15 @@ permalink: "{{ site.slug }}/index.html"
       {% endfor %}
     </div>
 
+    {% if site.tickerEnabled and site.ticker.length %}
     <div class="ticker">
       <div class="ticker-track{% if site.tickerDirection == 'rtl' %} dir-rtl{% endif %}" id="tickerTrack" style="--ticker-pct: {{ site.tickerSizePercent }}; animation-duration: {{ site.tickerSpeedSec }}s;">
         {% for line in site.ticker %}<span class="ticker-item">{{ line }}</span>{% endfor %}
       </div>
     </div>
+    {% endif %}
 
-    {% if site.qrTarget %}
+    {% if site.qrEnabled and site.qrTarget %}
     <div class="qr-box">
       <img src="{% qrDataUri site.qrTarget %}" alt="QR">
     </div>
