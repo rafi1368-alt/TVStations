@@ -6,11 +6,13 @@
     "1786439258502-_______1.jpeg"
   ],
   "ticker": [
-    "Welcome to Galilee Culinary Institute !"
+    "Welcome to The Galilee Culinary Institute !"
   ],
+  "tickerEnabled": true,
   "tickerDirection": "rtl",
   "tickerSpeedSec": 50,
   "tickerSizePercent": 40,
+  "qrEnabled": true,
   "qrTarget": "https://www.galileeculinaryinstitute.com/",
   "slug": "demo-corridor-portrait",
   "name": "GCI Entrance"
