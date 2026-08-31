@@ -1,0 +1,17 @@
+{
+  "orientation": "landscape",
+  "rotateViaCss": false,
+  "carouselIntervalSec": 8,
+  "images": [
+    "1788185119238-ac71bcda-gci_screen2.jpg"
+  ],
+  "ticker": [],
+  "tickerEnabled": false,
+  "tickerDirection": "ltr",
+  "tickerSpeedSec": 30,
+  "tickerSizePercent": 80,
+  "qrEnabled": false,
+  "qrTarget": "",
+  "slug": "sr2",
+  "name": "Showroom 2"
+}
