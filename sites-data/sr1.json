@@ -1,0 +1,17 @@
+{
+  "orientation": "landscape",
+  "rotateViaCss": false,
+  "carouselIntervalSec": 8,
+  "images": [
+    "1788185038299-452f18d3-gci_screen.jpg"
+  ],
+  "ticker": [],
+  "tickerEnabled": false,
+  "tickerDirection": "ltr",
+  "tickerSpeedSec": 30,
+  "tickerSizePercent": 80,
+  "qrEnabled": false,
+  "qrTarget": "",
+  "slug": "sr1",
+  "name": "Showroom 1"
+}
