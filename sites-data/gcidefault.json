@@ -1,0 +1,19 @@
+{
+  "orientation": "portrait",
+  "rotateViaCss": false,
+  "carouselIntervalSec": 8,
+  "images": [
+    "1788698916774-9cde32f9-_______1.jpeg"
+  ],
+  "ticker": [
+    "Welcome to the Galilee Culinary Institute !"
+  ],
+  "tickerEnabled": true,
+  "tickerDirection": "rtl",
+  "tickerSpeedSec": 50,
+  "tickerSizePercent": 40,
+  "qrEnabled": true,
+  "qrTarget": "https://www.galileeculinaryinstitute.com/",
+  "slug": "gcidefault",
+  "name": "GCI Default"
+}
