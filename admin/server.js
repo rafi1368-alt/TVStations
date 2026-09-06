@@ -4,7 +4,7 @@ const express = require("express");
 const multer = require("multer");
 
 const sites = require("./lib/sites");
-const { runBuild, runPublish } = require("./lib/build");
+const { runBuild, runPublish, syncFromOrigin } = require("./lib/build");
 const { basicAuth } = require("./lib/auth");
 const { renderList } = require("./views/list");
 const { renderNewSite } = require("./views/newSite");
@@ -55,7 +55,8 @@ const upload = multer({
   },
 });
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+  await syncFromOrigin().catch(() => {});
   res.send(renderList(sites.listSites(), flashFromQuery(req)));
 });
 
@@ -72,7 +73,8 @@ app.post("/sites", (req, res) => {
   }
 });
 
-app.get("/sites/:slug", (req, res) => {
+app.get("/sites/:slug", async (req, res) => {
+  await syncFromOrigin().catch(() => {});
   const site = sites.getSite(req.params.slug);
   if (!site) return res.status(404).send("Site not found");
   res.send(renderEdit(site, flashFromQuery(req)));

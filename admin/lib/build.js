@@ -30,6 +30,66 @@ async function ensureGitIdentity() {
   await run("git", ["config", "user.name", process.env.GIT_AUTHOR_NAME || "TVStation Admin"]);
 }
 
+// Shared by pushStep and syncFromOrigin: figure out which GitHub repo to talk
+// to (GITHUB_REPO env var, or parsed from the `origin` remote) and which
+// branch to treat as "the" branch (a deploy checkout is usually a detached
+// HEAD, where `rev-parse --abbrev-ref HEAD` literally returns "HEAD").
+async function resolveRepoAndBranch() {
+  let ownerRepo = process.env.GITHUB_REPO;
+  let remoteResult;
+  if (!ownerRepo) {
+    remoteResult = await run("git", ["remote", "get-url", "origin"]);
+    const match = remoteResult.stdout.match(/github\.com[:/]([^/]+\/[^/.]+?)(\.git)?$/);
+    ownerRepo = match && match[1];
+  }
+  if (!ownerRepo) {
+    return {
+      error: `Could not determine the GitHub owner/repo from the origin remote (got: "${remoteResult ? remoteResult.stdout : ""}" ${remoteResult ? remoteResult.stderr : ""}). Set GITHUB_REPO=owner/repo to bypass this.`,
+    };
+  }
+  const branchResult = await run("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
+  const detectedBranch = branchResult.stdout.trim();
+  const branch = process.env.GIT_PUBLISH_BRANCH || (detectedBranch && detectedBranch !== "HEAD" ? detectedBranch : "main");
+  return { ownerRepo, branch };
+}
+
+// Keeps this checkout's sites-data/assets in sync with GitHub even when
+// nothing has been deployed here recently - Render's auto-deploy has proven
+// unreliable, and edits can also land from a different running instance
+// (e.g. someone's local admin panel). Called before rendering the site list
+// and edit pages, so the panel can't silently show stale content.
+// Never touches anything if there are uncommitted local changes.
+async function syncFromOrigin() {
+  const statusResult = await run("git", ["status", "--porcelain"]);
+  if (statusResult.stdout.trim()) {
+    return { synced: false, reason: "local changes present" };
+  }
+
+  const token = process.env.GITHUB_TOKEN;
+  const { ownerRepo, branch, error } = await resolveRepoAndBranch();
+  if (error) return { synced: false, reason: error };
+
+  const fetchUrl = token ? `https://x-access-token:${token}@github.com/${ownerRepo}.git` : "origin";
+  const fetchResult = await run("git", ["fetch", fetchUrl, branch]);
+  if (!fetchResult.ok) {
+    return { synced: false, reason: fetchResult.stderr || "git fetch failed" };
+  }
+
+  const beforeResult = await run("git", ["rev-parse", "HEAD"]);
+  const afterResult = await run("git", ["rev-parse", "FETCH_HEAD"]);
+  if (beforeResult.stdout === afterResult.stdout) {
+    return { synced: false, reason: "already up to date" };
+  }
+
+  const resetResult = await run("git", ["reset", "--hard", "FETCH_HEAD"]);
+  return {
+    synced: resetResult.ok,
+    reason: resetResult.ok ? null : resetResult.stderr,
+    from: beforeResult.stdout.slice(0, 7),
+    to: afterResult.stdout.slice(0, 7),
+  };
+}
+
 async function commitStep(message) {
   const args = ["commit", "-m", JSON.stringify(message || "Update TV display content")];
   const result = await run("git", args);
@@ -50,31 +110,11 @@ async function pushStep() {
     return run("git", ["push"]);
   }
 
-  // GITHUB_REPO (format "owner/repo") skips parsing the origin remote entirely -
-  // set it if the remote URL ever comes back in a format the regex below can't
-  // handle. Otherwise this is derived automatically from `origin`.
-  let ownerRepo = process.env.GITHUB_REPO;
-  let remoteResult;
-  if (!ownerRepo) {
-    remoteResult = await run("git", ["remote", "get-url", "origin"]);
-    const match = remoteResult.stdout.match(/github\.com[:/]([^/]+\/[^/.]+?)(\.git)?$/);
-    ownerRepo = match && match[1];
-  }
-  if (!ownerRepo) {
-    return {
-      command: "git push",
-      ok: false,
-      stdout: "",
-      stderr: `Could not determine the GitHub owner/repo from the origin remote (got: "${remoteResult ? remoteResult.stdout : ""}" ${remoteResult ? remoteResult.stderr : ""}). Set GITHUB_REPO=owner/repo to bypass this.`,
-    };
+  const { ownerRepo, branch, error } = await resolveRepoAndBranch();
+  if (error) {
+    return { command: "git push", ok: false, stdout: "", stderr: error };
   }
 
-  // A deploy checkout is usually a detached HEAD at a specific commit rather
-  // than a real branch checkout - `rev-parse --abbrev-ref HEAD` then literally
-  // returns the string "HEAD", which is not a real branch to push to.
-  const branchResult = await run("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
-  const detectedBranch = branchResult.stdout.trim();
-  const branch = process.env.GIT_PUBLISH_BRANCH || (detectedBranch && detectedBranch !== "HEAD" ? detectedBranch : "main");
   const authedUrl = `https://x-access-token:${token}@github.com/${ownerRepo}.git`;
   const scrub = (s) => s.split(token).join("***");
 
@@ -114,4 +154,4 @@ async function runPublish(message) {
   return steps;
 }
 
-module.exports = { runBuild, runPublish };
+module.exports = { runBuild, runPublish, syncFromOrigin };
