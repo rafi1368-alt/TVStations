@@ -1,0 +1,19 @@
+{
+  "orientation": "landscape",
+  "rotateViaCss": false,
+  "carouselIntervalSec": 8,
+  "images": [
+    "1792921863572-f312fb74-meat.jpeg"
+  ],
+  "ticker": [
+    "Southern New England Mission - Welcome to the Galilee Culinary Institute !"
+  ],
+  "tickerEnabled": true,
+  "tickerDirection": "ltr",
+  "tickerSpeedSec": 40,
+  "tickerSizePercent": 50,
+  "qrEnabled": true,
+  "qrTarget": "https://www.galileeculinaryinstitute.com/",
+  "slug": "meatlab",
+  "name": "GCI Meat Lab"
+}
