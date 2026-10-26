@@ -15,7 +15,7 @@ permalink: "{{ site.slug }}/index.html"
 </head>
 <body class="orientation-{{ site.orientation }}{% if site.rotateViaCss %} rotate-css{% endif %}">
   <div class="stage">
-    <div class="carousel" id="carousel">
+    <div class="carousel{% if site.imageFit == 'contain' %} fit-contain{% endif %}" id="carousel">
       {% for img in site.images %}
       <img class="slide{% if loop.first %} active{% endif %}" src="/assets/{{ site.slug }}/images/{{ img }}" alt="">
       {% endfor %}

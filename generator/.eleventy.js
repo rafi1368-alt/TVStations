@@ -8,6 +8,7 @@ const SITE_DEFAULTS = {
   orientation: "landscape",
   rotateViaCss: false,
   carouselIntervalSec: 8,
+  imageFit: "cover",
   images: [],
   ticker: [],
   tickerEnabled: true,

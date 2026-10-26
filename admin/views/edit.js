@@ -65,6 +65,12 @@ function renderEdit(site, flash) {
         <label>Carousel speed (seconds)</label>
         <input type="number" name="carouselIntervalSec" value="${site.carouselIntervalSec}" min="2">
 
+        <label>Image fit</label>
+        <select name="imageFit">
+          <option value="cover" ${site.imageFit !== "contain" ? "selected" : ""}>Fill the screen (edges may be cropped)</option>
+          <option value="contain" ${site.imageFit === "contain" ? "selected" : ""}>Fit the whole image (black bars if the shape differs)</option>
+        </select>
+
         <div class="checkbox-row">
           <input type="checkbox" name="qrEnabled" id="qrEnabled" ${site.qrEnabled ? "checked" : ""}>
           <label for="qrEnabled" style="margin:0;">Show the QR code</label>

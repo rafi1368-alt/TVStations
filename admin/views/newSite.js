@@ -42,6 +42,12 @@ function renderNewSite(flash) {
         <label>Carousel speed (seconds)</label>
         <input type="number" name="carouselIntervalSec" value="8" min="2">
 
+        <label>Image fit</label>
+        <select name="imageFit">
+          <option value="cover">Fill the screen (edges may be cropped)</option>
+          <option value="contain">Fit the whole image (black bars if the shape differs)</option>
+        </select>
+
         <div class="checkbox-row">
           <input type="checkbox" name="qrEnabled" id="qrEnabled" checked>
           <label for="qrEnabled" style="margin:0;">Show the QR code</label>

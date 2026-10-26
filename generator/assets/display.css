@@ -53,6 +53,11 @@ html, body {
   transition: opacity 1.2s ease-in-out;
 }
 
+/* "Fit the whole image": nothing is cropped, the rest of the screen stays black. */
+.fit-contain .slide {
+  object-fit: contain;
+}
+
 .slide.active {
   opacity: 1;
 }
