@@ -1,6 +1,6 @@
 const { layout, escapeHtml } = require("./layout");
 
-function renderEdit(site, flash) {
+function renderEdit(site, flash, { publicSiteUrl = "" } = {}) {
   const slug = encodeURIComponent(site.slug);
 
   const imageItems = site.images
@@ -100,6 +100,14 @@ function renderEdit(site, flash) {
         <input type="file" name="images" accept="image/*" multiple>
         <button type="submit">Upload</button>
       </form>
+    </div>
+
+    <div class="card">
+      <h2>TV preview</h2>
+      <p class="muted">See this screen at real TV proportions (16:9 or portrait, Full HD or 4K) whatever the size of your computer window, with a note of how much of each image gets cropped.</p>
+      <a class="btn" href="/sites/${slug}/tv-preview" target="_blank">Preview as TV (what is saved now)</a>
+      ${publicSiteUrl ? `<a class="btn secondary" href="${escapeHtml(publicSiteUrl)}/${slug}/tv-preview/" target="_blank">Preview the published version</a>` : ""}
+      <p class="muted">The first one rebuilds before opening, so it takes a few seconds.</p>
     </div>
 
     <div class="card">

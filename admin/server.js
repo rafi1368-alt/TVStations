@@ -18,6 +18,14 @@ app.use(basicAuth);
 app.use(express.urlencoded({ extended: true }));
 app.use("/site-images", express.static(sites.ASSETS_DIR));
 app.use("/preview", express.static(path.join(ROOT, "dist")));
+// The built display pages reference /static and /assets with absolute paths, so the
+// admin serves those too - that is what lets a page (and the TV preview) render under /preview.
+app.use("/static", express.static(path.join(ROOT, "dist", "static")));
+app.use("/assets", express.static(path.join(ROOT, "dist", "assets")));
+
+// Base address of the published TV site (e.g. https://your-site.netlify.app), for the
+// "published version" preview link. Optional.
+const PUBLIC_SITE_URL = (process.env.PUBLIC_SITE_URL || "").replace(/\/+$/, "");
 
 function flashFromQuery(req) {
   if (!req.query.msg) return null;
@@ -77,7 +85,19 @@ app.get("/sites/:slug", async (req, res) => {
   await syncFromOrigin().catch(() => {});
   const site = sites.getSite(req.params.slug);
   if (!site) return res.status(404).send("Site not found");
-  res.send(renderEdit(site, flashFromQuery(req)));
+  res.send(renderEdit(site, flashFromQuery(req), { publicSiteUrl: PUBLIC_SITE_URL }));
+});
+
+// Rebuild so the preview reflects what is saved right now (before publishing), then open it.
+app.get("/sites/:slug/tv-preview", async (req, res) => {
+  const { slug } = req.params;
+  if (!sites.getSite(slug)) return res.status(404).send("Site not found");
+  const result = await runBuild();
+  if (!result.ok) {
+    return redirectWithFlash(res, `/sites/${encodeURIComponent(slug)}`, `Build error:
+${result.stderr}`, true);
+  }
+  res.redirect(`/preview/${encodeURIComponent(slug)}/tv-preview/`);
 });
 
 app.post("/sites/:slug", (req, res) => {

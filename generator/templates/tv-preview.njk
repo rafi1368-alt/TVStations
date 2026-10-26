@@ -1,0 +1,150 @@
+---
+pagination:
+  data: sites
+  size: 1
+  alias: site
+permalink: "{{ site.slug }}/tv-preview/index.html"
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TV preview - {{ site.name }}</title>
+{% raw %}<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #111827; color: #e5e7eb; font-family: "Segoe UI", Arial, sans-serif; }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 2rem; padding: 0.7rem 1.2rem; background: #1f2937; }
+  .group { display: flex; align-items: center; gap: 0.4rem; }
+  .group span { color: #9ca3af; font-size: 0.85rem; margin-right: 0.3rem; }
+  button { background: #374151; color: #fff; border: 0; border-radius: 6px; padding: 0.45rem 0.85rem; font-size: 0.9rem; cursor: pointer; }
+  button.on { background: #2563eb; }
+  main { padding: 1rem 1.2rem 2.5rem; }
+  #holder { position: relative; margin: 0 auto; background: #000; border: 3px solid #4b5563; border-radius: 6px; overflow: hidden; }
+  #frame { position: absolute; left: 0; top: 0; border: 0; background: #000; transform-origin: 0 0; }
+  .note { max-width: 62rem; margin: 0.8rem auto; color: #9ca3af; font-size: 0.85rem; line-height: 1.5; }
+  .note.center { text-align: center; }
+  .warn-box { color: #fbbf24; }
+  #report { max-width: 62rem; margin: 0.6rem auto; padding: 0; list-style: none; font-size: 0.85rem; }
+  #report li { padding: 0.3rem 0; border-bottom: 1px solid #1f2937; }
+  #report .good { color: #34d399; }
+  #report .warn { color: #fbbf24; }
+</style>{% endraw %}
+</head>
+<body data-orientation="{{ site.orientation }}" data-rotate="{{ 'yes' if site.rotateViaCss else 'no' }}">
+<header class="bar">
+  <div><strong>TV preview</strong> &middot; {{ site.name }}</div>
+  <div class="group"><span>Screen</span>
+    <button type="button" data-shape="landscape">Landscape 16:9</button>
+    <button type="button" data-shape="portrait">Portrait 9:16</button>
+  </div>
+  <div class="group"><span>Resolution</span>
+    <button type="button" data-res="1">Full HD</button>
+    <button type="button" data-res="2">4K</button>
+  </div>
+</header>
+<main>
+  <div id="holder"><iframe id="frame" src="../" title="TV preview of {{ site.name }}" scrolling="no"></iframe></div>
+  <p class="note center" id="sizeLabel"></p>
+  {% if site.rotateViaCss %}<p class="note warn-box">This screen uses &ldquo;rotate the content with CSS&rdquo;, so it is shown the way the TV receives it (sideways). On the physical vertical TV it appears upright.</p>{% endif %}
+  <p class="note">This is the page at the TV's real proportions and resolution, whatever the size of your computer window. Real TVs can differ slightly (the TV's own browser, overscan), but the shape and the cropping are what you will get. Your own browser window is usually wider than a TV, so it crops more than this does.</p>
+  <ul id="report"></ul>
+</main>
+{% raw %}<script>
+(function () {
+  var body = document.body;
+  var frame = document.getElementById("frame");
+  var holder = document.getElementById("holder");
+  var report = document.getElementById("report");
+  var label = document.getElementById("sizeLabel");
+  var BASE = { landscape: [1920, 1080], portrait: [1080, 1920] };
+  var rotated = body.getAttribute("data-rotate") === "yes";
+  var shape = (!rotated && body.getAttribute("data-orientation") === "portrait") ? "portrait" : "landscape";
+  var res = 1;
+
+  function size() {
+    return [BASE[shape][0] * res, BASE[shape][1] * res];
+  }
+
+  function layout() {
+    var s = size(), W = s[0], H = s[1];
+    var barHeight = document.querySelector(".bar").offsetHeight;
+    var k = Math.min((window.innerWidth - 60) / W, (window.innerHeight - barHeight - 90) / H);
+    if (!(k > 0.05)) k = 0.05;
+    frame.style.width = W + "px";
+    frame.style.height = H + "px";
+    frame.style.transform = "scale(" + k + ")";
+    holder.style.width = (W * k + 6) + "px";
+    holder.style.height = (H * k + 6) + "px";
+    label.textContent = "Showing " + W + " × " + H + " px (scaled down to " + Math.round(k * 100) + "% to fit your window)";
+    Array.prototype.forEach.call(document.querySelectorAll("[data-shape]"), function (b) {
+      b.className = b.getAttribute("data-shape") === shape ? "on" : "";
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-res]"), function (b) {
+      b.className = Number(b.getAttribute("data-res")) === res ? "on" : "";
+    });
+    describe();
+  }
+
+  function add(text, cls) {
+    var li = document.createElement("li");
+    li.className = cls;
+    li.textContent = text;
+    report.appendChild(li);
+  }
+
+  // Tells you, image by image, how much the TV will crop and how much it has to enlarge it.
+  function describe() {
+    var doc;
+    try { doc = frame.contentDocument; } catch (e) { return; }
+    if (!doc) return;
+    var slides = doc.querySelectorAll(".slide");
+    var s = size(), W = s[0], H = s[1];
+    report.innerHTML = "";
+    if (!slides.length) { add("This screen has no images yet.", "warn"); return; }
+    for (var i = 0; i < slides.length; i++) {
+      var im = slides[i];
+      if (!im.complete || !im.naturalWidth) {
+        if (!im.__tvWatch) { im.__tvWatch = true; im.addEventListener("load", describe); }
+        continue;
+      }
+      var nw = im.naturalWidth, nh = im.naturalHeight;
+      var fit = doc.defaultView.getComputedStyle(im).objectFit;
+      var sc = fit === "contain" ? Math.min(W / nw, H / nh) : Math.max(W / nw, H / nh);
+      var dw = nw * sc, dh = nh * sc;
+      var name = decodeURIComponent(im.getAttribute("src").split("/").pop()).replace(/^\d+-[0-9a-f]{8}-/, "");
+      var msg = "Image " + (i + 1) + " (" + name + ", " + nw + "×" + nh + "): ";
+      var cls = "good";
+      if (fit === "contain") {
+        var barsX = Math.round((W - dw) / 2 / W * 100), barsY = Math.round((H - dh) / 2 / H * 100);
+        if (barsX > 0) msg += "whole image shown, black bars of " + barsX + "% on each side";
+        else if (barsY > 0) msg += "whole image shown, black bars of " + barsY + "% on top and bottom";
+        else msg += "fits the screen exactly";
+      } else {
+        var cutX = Math.round((1 - W / dw) * 100), cutY = Math.round((1 - H / dh) * 100);
+        if (cutX > 0) msg += cutX + "% of the width is cut off (left and right)";
+        else if (cutY > 0) msg += cutY + "% of the height is cut off (top and bottom)";
+        else msg += "fits the screen exactly";
+        if (Math.max(cutX, cutY) >= 25) cls = "warn";
+      }
+      msg += " · scaled ×" + sc.toFixed(2);
+      if (sc > 1.5) { msg += " (enlarged a lot - may look soft)"; cls = "warn"; }
+      add(msg, cls);
+    }
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-shape]"), function (b) {
+    b.addEventListener("click", function () { shape = b.getAttribute("data-shape"); layout(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-res]"), function (b) {
+    b.addEventListener("click", function () { res = Number(b.getAttribute("data-res")); layout(); });
+  });
+  frame.addEventListener("load", describe);
+  window.addEventListener("resize", layout);
+  layout();
+})();
+</script>{% endraw %}
+</body>
+</html>
