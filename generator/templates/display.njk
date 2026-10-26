@@ -11,7 +11,7 @@ permalink: "{{ site.slug }}/index.html"
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ site.name }}</title>
-<link rel="stylesheet" href="/static/display.css">
+<link rel="stylesheet" href="/static/display.css?v={{ buildTime | urlencode }}">
 </head>
 <body class="orientation-{{ site.orientation }}{% if site.rotateViaCss %} rotate-css{% endif %}">
   <div class="stage">
@@ -43,6 +43,6 @@ permalink: "{{ site.slug }}/index.html"
       buildTime: {{ buildTime | dump | safe }}
     };
   </script>
-  <script src="/static/display.js"></script>
+  <script src="/static/display.js?v={{ buildTime | urlencode }}"></script>
 </body>
 </html>

@@ -148,7 +148,7 @@ app.post("/publish", async (req, res) => {
   const steps = await runPublish("Update TV display content");
   const failed = steps.find((s) => !s.ok && !/nothing to commit/i.test(s.stdout + s.stderr));
   const summary = steps.map((s) => `$ ${s.command}\n${s.stdout}\n${s.stderr}`.trim()).join("\n\n");
-  redirectWithFlash(res, "/", failed ? `Publish ran into a problem:\n${summary}` : "Published successfully.", !!failed);
+  redirectWithFlash(res, "/", failed ? `Publish ran into a problem:\n${summary}` : "Published successfully. The screens will pick up the change by themselves within a few minutes - no need to refresh the TV.", !!failed);
 });
 
 app.listen(PORT, () => {
