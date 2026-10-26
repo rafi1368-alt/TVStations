@@ -2,8 +2,9 @@
   "orientation": "landscape",
   "rotateViaCss": false,
   "carouselIntervalSec": 8,
+  "imageFit": "cover",
   "images": [
-    "1792935514386-74aaf53c-meat__4_.jpeg"
+    "1793013195615-124871af-meatlab_welcome.jpg"
   ],
   "ticker": [
     "Welcome to the Galilee Culinary Institute !"
